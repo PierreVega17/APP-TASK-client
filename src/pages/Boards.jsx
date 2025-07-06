@@ -26,7 +26,10 @@ export default function Boards() {
       credentials: 'include'
     })
       .then(res => res.json())
-      .then(data => setBoards(data));
+      .then(data => {
+        if (Array.isArray(data)) setBoards(data);
+        else setBoards([]); // o muestra un error visual
+      });
     // Se actualiza automáticamente por boardsUpdated en Navbar
   }, [user, setBoards, navigate]);
 
