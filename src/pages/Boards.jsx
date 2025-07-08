@@ -81,8 +81,16 @@ export default function Boards() {
               onClick={(e) => {
                 e.stopPropagation();
                 if (!window.confirm('¿Eliminar este tablero de tu vista?')) return;
-                setBoards(boards.filter(b => b._id !== board._id));
-                showSnackbar('Tablero ocultado de tu vista', 'info');
+                fetch(`${apiUrl}/boards/${board._id}`, {
+                  method: 'DELETE',
+                  credentials: 'include'
+                })
+                  .then(res => res.json())
+                  .then(data => {
+                    setBoards(boards.filter(b => b._id !== board._id));
+                    showSnackbar(data.message || 'Tablero eliminado', 'info');
+                  })
+                  .catch(() => showSnackbar('Error al eliminar tablero', 'error'));
               }}
             >
               <DeleteIcon />
